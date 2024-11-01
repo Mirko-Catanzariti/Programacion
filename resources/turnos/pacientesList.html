@@ -1,0 +1,27 @@
+<html>
+    
+    <div th:fragment="pacientesList">
+
+        <table class="table" width="100%">
+            <tr>
+                <th>Tipo</th>                
+                <th>Documento</th>                
+                <th>Nombre</th>                
+                <th>Sel</th>
+            </tr>
+
+            <tr th:each="entity : ${entities}">
+                <td th:text="${entity.tiposdoc.abreviatura}"></td>
+                <td th:text="${entity.nrodoc}"></td>
+                <td th:text="${entity.apellido}"></td>
+                <td width="5%">
+                    <input type="button" value="SEL" class="btn btn-success"
+                           th:data-parameter1="${entity.id}"
+                           th:onclick="javascript:selectPaciente(this.getAttribute('data-parameter1'))" />
+                </td>
+            </tr>                    
+        </table>                
+
+    </div>            
+
+</html>

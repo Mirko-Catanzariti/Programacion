@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:include="top :: top"></th:block> /*/-->
+
+<body>
+
+<div class="container">
+
+    <!--/*/ <th:block th:include="header :: header"></th:block> /*/-->
+    <div id='calendar'></div>
+
+    <script th:inline="javascript">
+
+                /*<![CDATA[*/
+
+                $(document).ready(function () {
+
+                    var sourceFullView = {url: './turnos/getall'};
+                    var sourceSummaryView = {url: './turnos/getall'};
+
+                    var CalLoading = true;
+
+                    $('#calendar').fullCalendar({
+
+                        header: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'month,agendaWeek,agendaDay'
+                        },
+                        defaultView: 'month',
+                        editable: true,
+                        allDaySlot: false,
+                        selectable: true,
+                        slotMinutes: 15,
+
+                        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                        monthNameShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
+                        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                        buttonText: {
+                            today: 'hoy',
+                            month: 'mes',
+                            week: 'semana',
+                            day: 'dia'
+                        },
+                        allDayText: 'Todo el dia',
+                        axisFormat: 'H:mm',
+                        timeFormat: 'H(:mm)',
+
+                        events: './turnos/getall',
+
+                        loading: function (isLoading, view) {
+                            if (isLoading) {// isLoading gives boolean value
+                                //$("#divcarga").html("<img src='/Images/loading.gif' width='15' /> Procesando ...");
+                            } else {
+                                //$("#divcarga").html("");
+                            }
+                        },
+
+                        eventClick: function (calEvent, jsEvent, view) {
+                            MyFunction('turnos/consultar/' + calEvent.id);
+
+                        },
+
+                        eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
+
+                            if (confirm("Confirm change appointment length?")) {
+                                UpdateEvent(event.id, event.start, event.end);
+                            } else {
+                                revertFunc();
+                            }
+                        },
+
+                        dayClick: function (date, allDay, jsEvent, view) {
+                            var f = new Date();
+                            var dia1 = f.getDate();
+                            var mes1 = (f.getMonth() + 1);
+                            var anio1 = f.getFullYear();
+                            var feactual = (dia1 <= 9 ? '0' + dia1 : dia1) + '/' + (mes1 <= 9 ? '0' + mes1 : mes1) + '/' + anio1;
+
+                            var dia = date.getDate();
+                            var mes = (date.getMonth() + 1);
+                            var anio = date.getFullYear();
+                            var fecha = (dia <= 9 ? '0' + dia : dia) + '/' + (mes <= 9 ? '0' + mes : mes) + '/' + anio;
+
+                            var f1 = fecha.substr(6, 4) + fecha.substr(3, 2) + fecha.substr(0, 2);
+                            var f2 = feactual.substr(6, 4) + feactual.substr(3, 2) + feactual.substr(0, 2);
+
+                            if (f1 < f2) {
+                                alert('Debes Seleccionar una Fecha Mayor o Igual a la Actual');
+                            } else {
+
+                                if (confirm("Agregar Turno Fecha " + $.fullCalendar.formatDate(date, 'dd/MM/yyyy') + " ?")) {
+
+
+                                     var host = './turnos/add/' + $.fullCalendar.formatDate(date, 'dd-MM-yyyy');
+                                     window.location.href = host;
+                                }
+
+                            }
+                        },
+
+                        viewRender: function (view, element) {
+
+                            if (!CalLoading) {
+                                if (view.name == 'month') {
+                                    $('#calendar').fullCalendar('removeEventSource', sourceFullView);
+                                    $('#calendar').fullCalendar('removeEvents');
+                                    $('#calendar').fullCalendar('addEventSource', sourceSummaryView);
+                                } else {
+                                    $('#calendar').fullCalendar('removeEventSource', sourceSummaryView);
+                                    $('#calendar').fullCalendar('removeEvents');
+                                    $('#calendar').fullCalendar('addEventSource', sourceFullView);
+                                }
+                            }
+                        }
+
+                    });
+
+                    CalLoading = true;
+
+                });
+
+                /*]]>*/
+
+    </script>
+
+    <!-- Fin Zona de Ajuste -->
+    <!-- ============================================================= -->
+
+</div>
+
+</body>
+
+</html>
+
+<!-- RECURSOS LOCALES -->
+<link th:href="@{/static/fullcalendar.css}" rel="stylesheet" media="screen"/>
+<script th:src="@{/static/fullcalendar.js}"></script>

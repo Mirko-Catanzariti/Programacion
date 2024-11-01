@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    
+    <!--/*/ <th:block th:include="top :: top"></th:block> /*/-->
+
+    <body>
+
+        <div class="container">
+
+            <!--/*/ <th:block th:include="header :: header"></th:block> /*/-->
+
+            <h2>Turnos Profesionales</h2>
+            <div>
+                <form class="form-horizontal" th:object="${entity}" th:action="@{/turnosprofesionales}" method="post">
+                    
+                   <div class="form-group">
+                       <div class="col-sm-2 control label">
+                           <label align="right">Profesionales</label>
+                       </div>
+                       <div class="col-sm-10">
+                           <select class="form-control" id="cmbProfesional" th:field="${entity.profesional}"
+                                    th:onchange="'javascript:jselect()'">
+                               <option th:each="profesional : ${profesionales}"
+                                       th:value="${profesional.id}"
+                                       th:selected="${profesional.id}"
+                                       th:text="${profesional.apellido} + ', ' + ${profesional.nombre}"></option>
+                           </select>
+                       </div>
+                   </div> 
+                    <br>
+                    <div th:if="${not #lists.isEmpty(entity.turnosGenerales)}">
+
+
+                        <table class="table" width="100%">
+                            <tr>
+                                <td><b>Dia</b></td>
+                                <td><b>Horario</b></td>
+                                <td><b>Activo</b></td>
+                            </tr>
+                            <tr th:each="turno, itemStat : *{turnosGenerales}">
+                                <input type="hidden" th:field="*{turnosGenerales[__${itemStat.index}__].id}"/>
+                                <td th:text="*{turnosGenerales[__${itemStat.index}__].dia.descrip}"></td>
+                                <td th:text="*{turnosGenerales[__${itemStat.index}__].horario.descrip}"></td>
+                                <td><input type="checkbox" th:field="*{turnosGenerales[__${itemStat.index}__].sel}"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <button type="submit" class="btn btn-success">Guardar</button>                        
+                        <a class="btn btn-default" th:href="${'/turnos/turnosprofesionales'}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </body>
+</html>
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+       function jsdelete() {
+
+            var dia = document.getElementById('cmbDias').value;
+
+            var host = '/turnos/turnosprofesionales/' + dia;
+
+           window.location.href = host;
+       }
+
+     /*]]>*/
+</script>

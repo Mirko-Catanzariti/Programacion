@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:include="top :: top"></th:block> /*/-->
+
+<body>
+<div class="container">
+
+    <!--/*/ <th:block th:include="header :: header"></th:block> /*/-->
+
+    <h2>Paciente</h2>
+    <div>
+        <form class="form-horizontal" th:object="${entity}" th:action="@{/popup}" method="post">
+
+            <input type="hidden" th:field="*{pacientes.id}"/>
+
+            <div class="form-group">
+                <div class="col-sm-1">
+                    <button type="button" class="btn btn-primary" onclick="popupPaciente()" >Paciente</button>
+                </div>
+                <div class="col-sm-11">
+                    <div id="divpaciente"></div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <!-- Fin Zona de Ajuste -->
+    <!-- ============================================================= -->
+</div>
+
+</body>
+</html>
+
+<!-- POPUP'S -->
+<div id="popupPacientes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    Buscar Paciente
+                </h2>
+                <div class="row">
+                    <div class="col-sm-10">
+                        <input type="text" id="txtapellido" class="form-control"
+                               placeholder="Ingrese Apellido del Paciente y Pulse ENTER"
+                               onkeypress="keypresspaciente(event);" />
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" value="Buscar" class="btn btn-info" onclick="findPaciente()" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="pacientesList">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    function popupPaciente() {
+      $('#popupPacientes').modal('show');
+    }
+
+    function findPaciente() {
+        if (document.getElementById('txtapellido').value == '') return;
+        var url = '/turnos/popup/buscarpaciente/' +
+                document.getElementById('txtapellido').value;
+        $.get(url, function (result) {
+            $("#pacientesList").html(result);
+        });
+    }
+
+     function selectPaciente(idpaciente) {
+         document.getElementById('paciente.id').value = idpaciente;
+         var url = '/turnos/popup/getpaciente/' + idpaciente;
+          $.get(url, function(data, status){
+             var jsontext = JSON.stringify(data);
+             var json = JSON.parse(jsontext);
+             $("#divpaciente").html(json.apellido + ' ' + json.nombre);
+          });
+
+          $('#popupPacientes').modal('hide');
+     }
+
+     function keypresspaciente(e) {
+        if (e.which == 13) {
+            if (document.getElementById('txtapellido').value == '') return;
+            findPaciente();
+        }
+    }
+
+    /*]]>*/
+
+</script>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head lang="en">
+
+    </head>
+    <body>
+
+        <div class="container">
+            <div th:fragment="header">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="/turnosweb">TURNOS</a>
+                        </div>
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="/turnosweb">Home</a></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Turnos
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" th:href="@{/turnos}">Definir Turnos</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Archivos
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" th:href="@{/dias}">Dias</a></li>
+                                    <li><a href="#" th:href="@{/horarios}">Horarios</a></li>
+                                    <li><a href="#" th:href="@{/especialidades}">Especialidades</a></li>
+                                    <li><a href="#" th:href="@{/tiposdoc}">Tipos de Documento</a></li>
+                                    <li><a href="#" th:href="@{/pacientes}">Pacientes</a></li>
+                                    <li><a href="#" th:href="@{/profesionales}">Profesionales</a></li>
+                                    <li><a href="#" th:href="@{/turnosgenerales}">Turnos Generales</a></li>
+                                    <li><a href="#" th:href="@{/turnosprofesionales}">Turnos Profesionales</a></li>
+                                    <li><a href="#" th:href="@{/obrassociales}">Obras Sociales</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">General
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" th:href="@{/usuarios}">Usuarios</a></li>
+                                    <li><a href="#" th:href="@{/roles}">Roles</a></li>
+                                </ul>
+                            </li>
+
+
+
+                        </ul>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+    </body>
+</html>
